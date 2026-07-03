@@ -14,6 +14,7 @@ extern "C" {
 #include "phone_app_sensors.hpp"
 #include "phone_app_settings.hpp"
 #include "phone_app_storage.hpp"
+#include "phone_app_system.hpp"
 
 static const char* TAG = "BROOKESIA_PHONE";
 
@@ -163,6 +164,13 @@ bool brookesia_phone_launcher_start(void) {
         ESP_LOGE(TAG, "Failed to allocate Phone app: Storage");
     } else {
         log_app_install_result("Storage", phone->installApp(storage_app));
+    }
+
+    PhoneAppSystem* system_app = new PhoneAppSystem();
+    if (system_app == nullptr) {
+        ESP_LOGE(TAG, "Failed to allocate Phone app: System");
+    } else {
+        log_app_install_result("System", phone->installApp(system_app));
     }
 
     lv_timer_create(update_clock_timer_cb, 1000, phone);
