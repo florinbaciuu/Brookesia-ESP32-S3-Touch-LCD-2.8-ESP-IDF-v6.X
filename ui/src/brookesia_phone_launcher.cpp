@@ -7,6 +7,7 @@ extern "C" {
 #include "esp_log.h"
 #include "lvgl.h"
 #include "lvgl_framework.h"
+#include "rtc_pcf85063.h"
 }
 
 #include "esp_brookesia.hpp"
@@ -34,11 +35,16 @@ static void update_clock_timer_cb(lv_timer_t* timer) {
         return;
     }
 
+    rtc_pcf85063_datetime_t rtc_time = {};
+    if (rtc_pcf85063_read(&rtc_time) == ESP_OK && rtc_pcf85063_datetime_is_valid(&rtc_time)) {
+        phone->getHome().getStatusBar()->setClock(rtc_time.hour, rtc_time.minute);
+        return;
+    }
+
     time_t now;
     struct tm timeinfo;
     time(&now);
     localtime_r(&now, &timeinfo);
-
     phone->getHome().getStatusBar()->setClock(timeinfo.tm_hour, timeinfo.tm_min);
 }
 
