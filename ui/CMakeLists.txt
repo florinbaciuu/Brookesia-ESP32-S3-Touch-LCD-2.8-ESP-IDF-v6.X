@@ -28,6 +28,7 @@ set(priv_requires
     power_key
     qmi8658
     rtc_pcf85063
+    settings_nvs
 )
 
 idf_component_register(

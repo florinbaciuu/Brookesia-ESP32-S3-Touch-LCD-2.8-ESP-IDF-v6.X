@@ -8,8 +8,10 @@
 extern "C" {
 
 #include "esp_log.h"
+#include "audio_pcm5101.h"
 #include "lcd_backlight.h"
 #include "lcd_bsp_interface.h"
+#include "settings_nvs.h"
 #include "touch_bsp_interface.h"
 #include "lvgl_framework.h"
 }
@@ -61,8 +63,14 @@ extern "C" void app_main(void) {
     esp_log_level_set("*", ESP_LOG_INFO);
     ESP_LOGI(TAG, "Starting application");
 
+    settings_nvs_values_t saved_settings = {};
+    const bool has_saved_settings = settings_nvs_load(&saved_settings) == ESP_OK;
+    if (has_saved_settings) {
+        (void)audio_pcm5101_set_volume(saved_settings.volume_percent);
+    }
+
     Backlight_Driver_Init();  // Initialize the LCD backlight with default brightness 80%
-    Backlight_Set(100);
+    Backlight_Set(has_saved_settings ? saved_settings.brightness_percent : 100);
     lvgl_framework_init();    // Initialize the LVGL framework and display
     bsp_lcd_init();           // Initialize the LCD display
     bsp_touchscreen_init();   // Initialize the touch controller
