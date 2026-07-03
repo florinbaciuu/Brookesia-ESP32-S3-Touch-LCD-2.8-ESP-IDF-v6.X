@@ -11,6 +11,7 @@ extern "C" {
 
 #include "esp_brookesia.hpp"
 #include "phone_app_board_info.hpp"
+#include "phone_app_sensors.hpp"
 
 static const char* TAG = "BROOKESIA_PHONE";
 
@@ -139,6 +140,13 @@ bool brookesia_phone_launcher_start(void) {
         ESP_LOGE(TAG, "Failed to allocate Phone app: Board");
     } else {
         log_app_install_result("Board", phone->installApp(board_app));
+    }
+
+    PhoneAppSensors* sensors_app = new PhoneAppSensors();
+    if (sensors_app == nullptr) {
+        ESP_LOGE(TAG, "Failed to allocate Phone app: Sensors");
+    } else {
+        log_app_install_result("Sensors", phone->installApp(sensors_app));
     }
 
     lv_timer_create(update_clock_timer_cb, 1000, phone);
