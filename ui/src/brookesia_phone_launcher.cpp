@@ -12,6 +12,7 @@ extern "C" {
 
 #include "esp_brookesia.hpp"
 #include "phone_app_board_info.hpp"
+#include "phone_app_clock.hpp"
 #include "phone_app_sensors.hpp"
 #include "phone_app_settings.hpp"
 #include "phone_app_storage.hpp"
@@ -149,6 +150,13 @@ bool brookesia_phone_launcher_start(void) {
         ESP_LOGE(TAG, "Failed to allocate Phone app: Board");
     } else {
         log_app_install_result("Board", phone->installApp(board_app));
+    }
+
+    PhoneAppClock* clock_app = new PhoneAppClock();
+    if (clock_app == nullptr) {
+        ESP_LOGE(TAG, "Failed to allocate Phone app: Clock");
+    } else {
+        log_app_install_result("Clock", phone->installApp(clock_app));
     }
 
     PhoneAppSensors* sensors_app = new PhoneAppSensors();

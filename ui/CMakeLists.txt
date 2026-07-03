@@ -1,5 +1,6 @@
 set(srcs
     "apps/board_info/phone_app_board_info.cpp"
+    "apps/clock/phone_app_clock.cpp"
     "apps/sensors/phone_app_sensors.cpp"
     "apps/settings/phone_app_settings.cpp"
     "apps/storage/phone_app_storage.cpp"
@@ -11,6 +12,7 @@ set(srcs
 
 set(include_dirs
     "apps/board_info"
+    "apps/clock"
     "apps/sensors"
     "apps/settings"
     "apps/storage"
