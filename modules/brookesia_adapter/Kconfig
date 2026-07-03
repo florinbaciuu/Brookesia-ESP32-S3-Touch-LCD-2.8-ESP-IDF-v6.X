@@ -1,0 +1,116 @@
+menu "Brookesia adapter"
+
+config BROOKESIA_ADAPTER_ENABLE
+    bool "Enable Brookesia adapter"
+    default n
+    help
+        Enable the modular Brookesia entry point. When disabled, the existing
+        LVGL demo UI is used unchanged.
+
+config BROOKESIA_ADAPTER_LOCAL_LVGL_SHELL
+    bool "Use local LVGL shell while Brookesia components are integrated"
+    default y
+    depends on BROOKESIA_ADAPTER_ENABLE
+    help
+        Start a small LVGL shell owned by the Brookesia adapter. This keeps the
+        board/display/touch initialization path stable while the real Brookesia
+        components are added behind this adapter.
+
+config BROOKESIA_ADAPTER_PHONE_LAUNCHER_ENABLE
+    bool "Use ESP-Brookesia Phone launcher"
+    default y
+    depends on BROOKESIA_ADAPTER_ENABLE
+    help
+        Start the official ESP-Brookesia Phone system UI. If startup fails and
+        the local LVGL shell is enabled, the adapter falls back to diagnostics.
+
+config BROOKESIA_ADAPTER_POWER_BATTERY_ADC
+    bool "Enable battery voltage reading on GPIO8"
+    default y
+    depends on BROOKESIA_ADAPTER_ENABLE
+    help
+        Read the ESP32-S3-Touch-LCD-2.8 battery divider on GPIO8 and expose
+        the measured Li-ion voltage through the Brookesia PowerBatteryIface.
+
+config BROOKESIA_ADAPTER_RTC_PCF85063_ENABLE
+    bool "Enable PCF85063 RTC service"
+    default y
+    depends on BROOKESIA_ADAPTER_ENABLE
+    help
+        Enable the onboard PCF85063 real-time clock used by the Waveshare
+        ESP32-S3-Touch-LCD-2.8 V1 board.
+
+config BROOKESIA_ADAPTER_RTC_SET_INVALID_FROM_BUILD_TIME
+    bool "Set invalid PCF85063 RTC from build timestamp"
+    default y
+    depends on BROOKESIA_ADAPTER_RTC_PCF85063_ENABLE
+    help
+        If the RTC returns an invalid date, initialize it once from the
+        firmware build date and time. A valid RTC value is left untouched.
+
+config BROOKESIA_ADAPTER_IMU_QMI8658_ENABLE
+    bool "Enable QMI8658 IMU service"
+    default y
+    depends on BROOKESIA_ADAPTER_ENABLE
+    help
+        Enable the onboard QMI8658 accelerometer and gyroscope used by the
+        Waveshare ESP32-S3-Touch-LCD-2.8 V1 board.
+
+config BROOKESIA_ADAPTER_POWER_KEY_ENABLE
+    bool "Enable power key/latch service"
+    default y
+    depends on BROOKESIA_ADAPTER_ENABLE
+    help
+        Keep the Waveshare V1 power latch active and expose the power key
+        state through the local Brookesia board status.
+
+config BROOKESIA_ADAPTER_AUDIO_PCM5101_ENABLE
+    bool "Enable PCM5101 audio service"
+    default y
+    depends on BROOKESIA_ADAPTER_ENABLE
+    help
+        Enable the onboard PCM5101 DAC through the ESP-IDF I2S standard
+        driver on the Waveshare ESP32-S3-Touch-LCD-2.8 V1 board.
+
+config BROOKESIA_ADAPTER_AUDIO_PCM5101_TEST_TONE
+    bool "Play a short PCM5101 test tone on boot"
+    default n
+    depends on BROOKESIA_ADAPTER_AUDIO_PCM5101_ENABLE
+    help
+        Play a short 440Hz tone after audio initialization. Keep this disabled
+        for quiet boots once the audio path is validated.
+
+menu "Storage auto-mount"
+    depends on BROOKESIA_ADAPTER_ENABLE
+
+config BROOKESIA_ADAPTER_STORAGE_AUTOMOUNT_SDMMC
+    bool "Auto-mount SD/MMC FAT storage"
+    default n
+    help
+        Mount the existing SD/MMC FAT filesystem before the Brookesia HAL
+        storage interface is registered.
+
+config BROOKESIA_ADAPTER_STORAGE_AUTOMOUNT_FAT
+    bool "Auto-mount internal FAT storage"
+    default n
+    help
+        Mount the existing internal FAT filesystem before the Brookesia HAL
+        storage interface is registered.
+
+config BROOKESIA_ADAPTER_STORAGE_AUTOMOUNT_SPIFFS
+    bool "Auto-mount SPIFFS storage"
+    default n
+    help
+        Mount the existing SPIFFS filesystem before the Brookesia HAL storage
+        interface is registered.
+
+config BROOKESIA_ADAPTER_STORAGE_AUTOMOUNT_LITTLEFS
+    bool "Auto-mount LittleFS storage"
+    default n
+    help
+        Mount the existing LittleFS filesystem before the Brookesia HAL storage
+        interface is registered.
+
+endmenu
+
+endmenu

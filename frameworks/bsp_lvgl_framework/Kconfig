@@ -1,0 +1,12 @@
+menu "BSP LVGL Framework"
+
+config BSP_LVGL_MAIN_TASK_STACK_SIZE
+    int "LVGL main task stack size"
+    default 24576
+    range 8192 65536
+    help
+        Stack size, in bytes, for the LVGL main task. ESP-Brookesia Phone
+        creates a larger widget tree than the local diagnostic UI, so the
+        default leaves enough headroom for launcher animations and app startup.
+
+endmenu

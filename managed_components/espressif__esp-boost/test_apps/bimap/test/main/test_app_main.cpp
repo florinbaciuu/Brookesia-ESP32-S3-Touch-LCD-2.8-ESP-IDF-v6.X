@@ -1,0 +1,62 @@
+/*
+ * SPDX-FileCopyrightText: 2024 Espressif Systems (Shanghai) CO LTD
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+#include <inttypes.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "esp_heap_caps.h"
+#include "unity.h"
+#include "unity_test_utils.h"
+#include "common_components.hpp"
+
+// Some resources are lazy allocated in the LCD driver, the threadhold is left for that case
+#define TEST_MEMORY_LEAK_THRESHOLD (0)
+
+void setUp(void)
+{
+    unity_utils_record_free_mem();
+}
+
+void tearDown(void)
+{
+    size_t memory_leak_threshold = common_get_memory_leak_threshold();
+    esp_reent_cleanup();
+    unity_utils_evaluate_leaks_direct(memory_leak_threshold);
+
+    if (memory_leak_threshold != TEST_MEMORY_LEAK_THRESHOLD) {
+        common_set_memory_leak_threshold(TEST_MEMORY_LEAK_THRESHOLD);
+    }
+}
+
+extern "C" void app_main(void)
+{
+    /**
+     * _______   __                                         ________                      __
+     * |       \ |  \                                       |        \                    |  \
+     * | $$$$$$$\ \$$ ______ ____    ______    ______        \$$$$$$$$______    _______  _| $$_
+     * | $$__/ $$|  \|      \    \  |      \  /      \  ______ | $$  /      \  /       \|   $$ \
+     * | $$    $$| $$| $$$$$$\$$$$\  \$$$$$$\|  $$$$$$\|      \| $$ |  $$$$$$\|  $$$$$$$ \$$$$$$
+     * | $$$$$$$\| $$| $$ | $$ | $$ /      $$| $$  | $$ \$$$$$$| $$ | $$    $$ \$$    \   | $$ __
+     * | $$__/ $$| $$| $$ | $$ | $$|  $$$$$$$| $$__/ $$        | $$ | $$$$$$$$ _\$$$$$$\  | $$|  \
+     * | $$    $$| $$| $$ | $$ | $$ \$$    $$| $$    $$        | $$  \$$     \|       $$   \$$  $$
+     *  \$$$$$$$  \$$ \$$  \$$  \$$  \$$$$$$$| $$$$$$$          \$$   \$$$$$$$ \$$$$$$$     \$$$$
+     *                                       | $$
+     *                                       | $$
+     *                                        \$$
+     */
+    printf(" _______   __                                         ________                      __      \r\n");
+    printf("|       \\ |  \\                                       |        \\                    |  \\     \r\n");
+    printf("| $$$$$$$\\ \\$$ ______ ____    ______    ______        \\$$$$$$$$______    _______  _| $$_    \r\n");
+    printf("| $$__/ $$|  \\|      \\    \\  |      \\  /      \\  ______ | $$  /      \\  /       \\|   $$ \\   \r\n");
+    printf("| $$    $$| $$| $$$$$$\\$$$$\\  \\$$$$$$\\|  $$$$$$\\|      \\| $$ |  $$$$$$\\|  $$$$$$$ \\$$$$$$   \r\n");
+    printf("| $$$$$$$\\| $$| $$ | $$ | $$ /      $$| $$  | $$ \\$$$$$$| $$ | $$    $$ \\$$    \\   | $$ __  \r\n");
+    printf("| $$__/ $$| $$| $$ | $$ | $$|  $$$$$$$| $$__/ $$        | $$ | $$$$$$$$ _\\$$$$$$\\  | $$|  \\ \r\n");
+    printf("| $$    $$| $$| $$ | $$ | $$ \\$$    $$| $$    $$        | $$  \\$$     \\|       $$   \\$$  $$ \r\n");
+    printf(" \\$$$$$$$  \\$$ \\$$  \\$$  \\$$  \\$$$$$$$| $$$$$$$          \\$$   \\$$$$$$$ \\$$$$$$$     \\$$$$  \r\n");
+    printf("                                      | $$                                                  \r\n");
+    printf("                                      | $$                                                  \r\n");
+    printf("                                       \\$$                                                  \r\n");
+    unity_run_menu();
+}

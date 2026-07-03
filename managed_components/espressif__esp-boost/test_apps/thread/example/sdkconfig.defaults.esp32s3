@@ -1,0 +1,2 @@
+# This configuration option must be enabled, otherwise some test cases may fail to run
+CONFIG_COMPILER_OPTIMIZATION_PERF=y

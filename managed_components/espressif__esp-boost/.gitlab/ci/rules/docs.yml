@@ -1,0 +1,12 @@
+#
+# Docs
+#
+.rules:pre_check:readme:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-pre_check]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-docs_md]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]

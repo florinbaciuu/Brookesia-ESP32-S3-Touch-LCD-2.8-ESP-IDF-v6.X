@@ -1,0 +1,101 @@
+TOUCH_REP.txt
+Raport fix touch/scroll pentru Waveshare ESP32-S3 Touch LCD 2.8 V1
+
+Problema observata
+------------------
+- Touch-ul functiona pentru tap/click, inclusiv butoanele din bara Brookesia.
+- Scroll-ul in aplicatia Board nu functiona deloc.
+- Scrollbar-ul era vizibil, deci LVGL vedea continut scrollabil, dar drag-ul nu producea scroll.
+- Concluzie: problema nu era layout-ul principal, ci secventa de evenimente touch livrata catre LVGL.
+
+Cauza probabila
+---------------
+Callback-ul LVGL pentru touch trimitea RELEASED imediat la prima citire fara coordonate:
+
+    if (touch_read(&x, &y)) {
+        data->state = LV_INDEV_STATE_PRESSED;
+    } else {
+        data->state = LV_INDEV_STATE_RELEASED;
+    }
+
+Pentru click simplu asta poate merge, dar pentru scroll LVGL are nevoie de o secventa continua:
+
+    PRESSED -> coordonate schimbate -> PRESSED -> coordonate schimbate -> RELEASED
+
+Daca driverul CST328/I2C rateaza 1-2 citiri in timpul drag-ului, LVGL vede RELEASED prea devreme si nu mai recunoaste gestul de scroll.
+
+Fix reusit
+----------
+Fisier modificat:
+
+    frameworks/bsp_lvgl_framework/bsp_lvgl_indev.c
+
+Am adaugat un mic "release hold" in callback-ul activ `lv_touchpad_read()`.
+Cand ultima citire valida a fost recenta, callback-ul pastreaza starea PRESSED inca 70 ms, folosind ultimele coordonate valide.
+
+Patch esential:
+
+    #include "esp_timer.h"
+
+    #define TOUCH_RELEASE_HOLD_US (70 * 1000)
+
+    void lv_touchpad_read(lv_indev_t* indev_drv, lv_indev_data_t* data) {
+        static uint16_t last_x = 0;
+        static uint16_t last_y = 0;
+        static int64_t  last_pressed_us = 0;
+        static bool     was_pressed = false;
+        uint16_t        x, y;
+
+        if (touch_read(&x, &y)) {
+            data->state   = LV_INDEV_STATE_PRESSED;
+            data->point.x = x;
+            data->point.y = y;
+            last_x        = x;
+            last_y        = y;
+            last_pressed_us = esp_timer_get_time();
+            was_pressed = true;
+        } else {
+            const int64_t now_us = esp_timer_get_time();
+            const bool hold_press = was_pressed && ((now_us - last_pressed_us) < TOUCH_RELEASE_HOLD_US);
+            data->state   = hold_press ? LV_INDEV_STATE_PRESSED : LV_INDEV_STATE_RELEASED;
+            data->point.x = last_x;
+            data->point.y = last_y;
+            if (!hold_press) {
+                was_pressed = false;
+            }
+        }
+    }
+
+Valoare testata
+---------------
+- 70 ms a fost confirmat pe placa: scroll-ul a inceput sa functioneze.
+- Daca release-ul se simte lipicios, se poate incerca 40-50 ms.
+- Daca scroll-ul inca se intrerupe, se poate incerca 100 ms.
+
+Alte schimbari UI facute in timpul depanarii
+--------------------------------------------
+Fisier:
+
+    ui/apps/board_info/phone_app_board_info.cpp
+
+Schimbari utile pentru test:
+- Root-ul aplicatiei Board este explicit scrollabil.
+- Scrollbar-ul a fost pus permanent ON pentru diagnostic.
+- S-au adaugat mai multe randuri ca sa existe overflow real.
+- Randurile au fost facute pasive la touch, ca sa nu retina apasarea in locul containerului parinte.
+- Bounce/elastic si momentum au fost dezactivate pentru test determinist.
+
+Aceste schimbari au ajutat la diagnostic, dar fixul care a facut diferenta pentru touch/scroll a fost release hold-ul din `bsp_lvgl_indev.c`.
+
+Observatie importanta pentru alte proiecte
+------------------------------------------
+Daca tap-ul merge dar scroll-ul nu merge, verificati in primul rand callback-ul LVGL `read_cb` pentru touch.
+Semn clar de problema:
+
+    - butoanele merg
+    - scrollbar-ul este vizibil
+    - continutul nu se misca la drag
+
+In acest caz, touch-ul este probabil raportat discontinuu catre LVGL: PRESSED/RELEASED/PRESSED in timpul unei singure trageri.
+Solutia este sa pastrati starea PRESSED pentru cateva zeci de milisecunde dupa ultima citire valida.
+

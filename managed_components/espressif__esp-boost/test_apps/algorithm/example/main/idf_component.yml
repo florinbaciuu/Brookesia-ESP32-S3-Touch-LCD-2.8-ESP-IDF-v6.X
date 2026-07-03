@@ -1,0 +1,15 @@
+## IDF Component Manager Manifest File
+dependencies:
+  test_utils:
+    rules:
+      - if: "idf_version <6.0"
+        rules:
+      - if: "idf_version <6.0"
+        path: ${IDF_PATH}/tools/unit-test-app/components/test_utils
+      - if: "idf_version >=6.0"
+        path: ${IDF_PATH}/tools/test_apps/components/test_utils
+      - if: "idf_version >=6.0"
+        path: ${IDF_PATH}/tools/test_apps/components/test_utils
+  esp-boost:
+    version: "*"
+    override_path: "../../../../../esp-boost"

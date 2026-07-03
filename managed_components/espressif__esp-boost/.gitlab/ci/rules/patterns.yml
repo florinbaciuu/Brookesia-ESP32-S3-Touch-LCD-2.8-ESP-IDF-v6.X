@@ -1,0 +1,109 @@
+############
+# Patterns #
+############
+
+# build system, if changed, build all apps
+.patterns-build_system:
+  - ".gitlab/**/*"
+  - ".build-rules.yml"
+
+# component files
+.patterns-component:
+  - "src/**/*"
+  - "CMakeLists.txt"
+
+# docs files
+.patterns-docs_md:
+  - "**/*.md"
+
+# test_apps common files
+.patterns-test_apps_common:
+  - "test_apps/common_components/**/*"
+
+# test_apps asio test files
+.patterns-test_apps_asio_test:
+  - "test_apps/asio/test/**/*"
+
+# test_apps signals2 example files
+.patterns-test_apps_signals2_example:
+  - "test_apps/signals2/example/**/*"
+
+# test_apps signals2 test files
+.patterns-test_apps_signals2_test:
+  - "test_apps/signals2/test/**/*"
+
+# test_apps thread example files
+.patterns-test_apps_thread_example:
+  - "test_apps/thread/example/**/*"
+
+# test_apps thread test_common files
+.patterns-test_apps_thread_test_common:
+  - "test_apps/thread/test_common/**/*"
+
+# test_apps thread test_more files
+.patterns-test_apps_thread_test_more:
+  - "test_apps/thread/test_more/**/*"
+
+# test_apps graph example files
+.patterns-test_apps_graph_example:
+  - "test_apps/graph/example/**/*"
+
+# test_apps array test files
+.patterns-test_apps_array_test:
+  - "test_apps/array/test/**/*"
+
+# test_apps align test files
+.patterns-test_apps_align_test:
+  - "test_apps/align/test/**/*"
+
+# test_apps format example files
+.patterns-test_apps_format_example:
+  - "test_apps/format/example/**/*"
+
+# test_apps format test files
+.patterns-test_apps_format_test:
+  - "test_apps/format/test/**/*"
+
+# test_apps algorithm example files
+.patterns-test_apps_algorithm_example:
+  - "test_apps/algorithm/example/**/*"
+
+# test_apps algorithm test files
+.patterns-test_apps_algorithm_test:
+  - "test_apps/algorithm/test/**/*"
+
+# test_apps assign test files
+.patterns-test_apps_assign_test:
+  - "test_apps/assign/test/**/*"
+
+# test_apps bimap example files
+.patterns-test_apps_bimap_example:
+  - "test_apps/bimap/example/**/*"
+
+# test_apps bimap test files
+.patterns-test_apps_bimap_test:
+  - "test_apps/bimap/test/**/*"
+
+##############
+# if anchors #
+##############
+.patterns-if-protected:
+  if: '($CI_COMMIT_REF_NAME == "master" || $CI_COMMIT_BRANCH =~ /^release\/v/ || $CI_COMMIT_TAG =~ /^v\d+\.\d+(\.\d+)?($|-)/)'
+
+.patterns-if-dev-push:
+  if: '$CI_COMMIT_REF_NAME != "master" && $CI_COMMIT_BRANCH !~ /^release\/v/ && $CI_COMMIT_TAG !~ /^v\d+\.\d+(\.\d+)?($|-)/ && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event")'
+
+.patterns-if-trigger-job:
+  if: '$BOT_DYNAMIC_TEST_JOBS && $BOT_DYNAMIC_TEST_JOBS =~ $CI_JOB_NAME'
+
+.patterns-if-label-build:
+  if: '$BOT_LABEL_BUILD || $CI_MERGE_REQUEST_LABELS =~ /^(?:[^,\n\r]+,)*build(?:,[^,\n\r]+)*$/i'
+
+.patterns-if-label-target_test:
+  if: '$BOT_LABEL_TARGET_TEST || $CI_MERGE_REQUEST_LABELS =~ /^(?:[^,\n\r]+,)*target_test(?:,[^,\n\r]+)*$/i'
+
+.patterns-if-label-pre_check:
+  if: '$BOT_LABEL_PRE_CHECK || $CI_MERGE_REQUEST_LABELS =~ /^(?:[^,\n\r]+,)*pre_check(?:,[^,\n\r]+)*$/i'
+
+.patterns-if-label-deploy:
+  if: '$BOT_LABEL_DEPLOY || $CI_MERGE_REQUEST_LABELS =~ /^(?:[^,\n\r]+,)*deploy(?:,[^,\n\r]+)*$/i'

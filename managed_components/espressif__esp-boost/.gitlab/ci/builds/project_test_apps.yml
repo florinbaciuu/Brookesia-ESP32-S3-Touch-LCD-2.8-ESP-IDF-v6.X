@@ -1,0 +1,167 @@
+#
+# Test apps: asio
+#
+# test
+build_test_apps_asio_test:
+  extends:
+    - .build_template
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_asio_test
+  variables:
+    EXAMPLE_DIR: test_apps/asio/test
+
+#
+# Test apps: signals2
+#
+# example
+build_test_apps_signals2_example:
+  extends:
+    - .build_template
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_signals2_example
+  variables:
+    EXAMPLE_DIR: test_apps/signals2/example
+# test
+build_test_apps_signals2_test:
+  extends:
+    - .build_template
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_signals2_test
+  variables:
+    EXAMPLE_DIR: test_apps/signals2/test
+
+#
+# Test apps: thread
+#
+# example
+build_test_apps_thread_example:
+  extends:
+    - .build_template
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_thread_example
+  variables:
+    EXAMPLE_DIR: test_apps/thread/example
+# test_common
+build_test_apps_thread_test_common:
+  extends:
+    - .build_template_without_large_artifacts
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_thread_test_common
+  variables:
+    EXAMPLE_DIR: test_apps/thread/test_common
+# test_more
+build_test_apps_thread_test_more:
+  extends:
+    - .build_template_without_large_artifacts
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_thread_test_more
+  variables:
+    EXAMPLE_DIR: test_apps/thread/test_more
+
+#
+# Test apps: graph
+#
+# example
+build_test_apps_graph_example:
+  extends:
+    - .build_template
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_graph_example
+  variables:
+    EXAMPLE_DIR: test_apps/graph/example
+
+#
+# Test apps: array
+#
+# test
+build_test_apps_array_test:
+  extends:
+    - .build_template
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_array_test
+  variables:
+    EXAMPLE_DIR: test_apps/array/test
+
+#
+# Test apps: align
+#
+# test
+build_test_apps_align_test:
+  extends:
+    - .build_template
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_align_test
+  variables:
+    EXAMPLE_DIR: test_apps/align/test
+
+#
+# Test apps: format
+#
+# example
+build_test_apps_format_example:
+  extends:
+    - .build_template
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_format_example
+  variables:
+    EXAMPLE_DIR: test_apps/format/example
+# test
+build_test_apps_format_test:
+  extends:
+    - .build_template
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_format_test
+  variables:
+    EXAMPLE_DIR: test_apps/format/test
+
+#
+# Test apps: algorithm
+#
+# example
+build_test_apps_algorithm_example:
+  extends:
+    - .build_template
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_algorithm_example
+  variables:
+    EXAMPLE_DIR: test_apps/algorithm/example
+# test
+build_test_apps_algorithm_test:
+  extends:
+    - .build_template
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_algorithm_test
+  variables:
+    EXAMPLE_DIR: test_apps/algorithm/test
+
+#
+# Test apps: assign
+#
+# test
+build_test_apps_assign_test:
+  extends:
+    - .build_template
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_assign_test
+  variables:
+    EXAMPLE_DIR: test_apps/assign/test
+
+#
+# Test apps: bimap
+#
+# example
+build_test_apps_bimap_example:
+  extends:
+    - .build_template
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_bimap_example
+  variables:
+    EXAMPLE_DIR: test_apps/bimap/example
+# test
+build_test_apps_bimap_test:
+  extends:
+    - .build_template
+    - .build_idf_release_version_general
+    - .rules:build:test_apps_bimap_test
+  variables:
+    EXAMPLE_DIR: test_apps/bimap/test

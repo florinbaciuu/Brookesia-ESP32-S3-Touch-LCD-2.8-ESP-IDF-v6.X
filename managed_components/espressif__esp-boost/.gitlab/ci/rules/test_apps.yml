@@ -1,0 +1,279 @@
+#
+# Test apps: asio
+#
+# test
+.rules:build:test_apps_asio_test:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_asio_test]
+
+#
+# Test apps: signals2
+#
+# example
+.rules:build:test_apps_signals2_example:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_signals2_example]
+# test
+.rules:build:test_apps_signals2_test:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_signals2_test]
+
+#
+# Test apps: thread
+#
+# example
+.rules:build:test_apps_thread_example:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_thread_example]
+# test_common
+.rules:build:test_apps_thread_test_common:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_thread_test_common]
+# test_more
+.rules:build:test_apps_thread_test_more:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_thread_test_more]
+
+#
+# Test apps: graph
+#
+# example
+.rules:build:test_apps_graph_example:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_graph_example]
+
+#
+# Test apps: array
+#
+# test
+.rules:build:test_apps_array_test:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_array_test]
+
+#
+# Test apps: align
+#
+# test
+.rules:build:test_apps_align_test:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_align_test]
+
+#
+# Test apps: format
+#
+# example
+.rules:build:test_apps_format_example:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_format_example]
+# test
+.rules:build:test_apps_format_test:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_format_test]
+
+#
+# Test apps: algorithm
+#
+# example
+.rules:build:test_apps_algorithm_example:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_algorithm_example]
+# test
+.rules:build:test_apps_algorithm_test:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_algorithm_test]
+
+#
+# Test apps: assign
+#
+# test
+.rules:build:test_apps_assign_test:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_assign_test]
+
+#
+# Test apps: bimap
+#
+# example
+.rules:build:test_apps_bimap_example:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_bimap_example]
+# test
+.rules:build:test_apps_bimap_test:
+  rules:
+    - !reference [.patterns-if-protected]
+    - !reference [.patterns-if-label-build]
+    - !reference [.patterns-if-label-target_test]
+    - !reference [.patterns-if-trigger-job]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-build_system]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-component]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_common]
+    - if: !reference [.patterns-if-dev-push, if]
+      changes: !reference [.patterns-test_apps_bimap_test]

@@ -1,0 +1,327 @@
+#
+# Test apps: asio
+#
+# test
+target_test_apps_asio_test:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_asio_test
+  needs:
+    - job: "build_test_apps_asio_test"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/asio/test
+    TEST_ENV: ${ENV_TAG}
+
+#
+# Test apps: signals2
+#
+# example
+target_test_apps_signals2_example:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_signals2_example
+  needs:
+    - job: "build_test_apps_signals2_example"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/signals2/example
+    TEST_ENV: ${ENV_TAG}
+# test
+target_test_apps_signals2_test:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_signals2_test
+  needs:
+    - job: "build_test_apps_signals2_test"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/signals2/test
+    TEST_ENV: ${ENV_TAG}
+
+#
+# Test apps: thread
+#
+# example
+target_test_apps_thread_example:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_thread_example
+  needs:
+    - job: "build_test_apps_thread_example"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_with_psram_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/thread/example
+    TEST_ENV: ${ENV_TAG}
+# test_common
+target_test_apps_thread_test_common:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_thread_test_common
+  needs:
+    - job: "build_test_apps_thread_test_common"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_with_psram_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/thread/test_common
+    TEST_ENV: ${ENV_TAG}
+# test_more
+target_test_apps_thread_test_more:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_thread_test_more
+  needs:
+    - job: "build_test_apps_thread_test_more"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_with_psram_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/thread/test_more
+    TEST_ENV: ${ENV_TAG}
+
+#
+# Test apps: graph
+#
+# example
+target_test_apps_graph_example:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_graph_example
+  needs:
+    - job: "build_test_apps_graph_example"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/graph/example
+    TEST_ENV: ${ENV_TAG}
+
+#
+# Test apps: array
+#
+# test
+target_test_apps_array_test:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_array_test
+  needs:
+    - job: "build_test_apps_array_test"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/array/test
+    TEST_ENV: ${ENV_TAG}
+
+#
+# Test apps: align
+#
+# test
+target_test_apps_align_test:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_align_test
+  needs:
+    - job: "build_test_apps_align_test"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/align/test
+    TEST_ENV: ${ENV_TAG}
+
+#
+# Test apps: format
+#
+# example
+target_test_apps_format_example:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_format_example
+  needs:
+    - job: "build_test_apps_format_example"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/format/example
+    TEST_ENV: ${ENV_TAG}
+# test
+target_test_apps_format_test:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_format_test
+  needs:
+    - job: "build_test_apps_format_test"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/format/test
+    TEST_ENV: ${ENV_TAG}
+
+#
+# Test apps: algorithm
+#
+# example
+target_test_apps_algorithm_example:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_algorithm_example
+  needs:
+    - job: "build_test_apps_algorithm_example"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/algorithm/example
+    TEST_ENV: ${ENV_TAG}
+# test
+target_test_apps_algorithm_test:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_algorithm_test
+  needs:
+    - job: "build_test_apps_algorithm_test"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/algorithm/test
+    TEST_ENV: ${ENV_TAG}
+
+#
+# Test apps: assign
+#
+# test
+target_test_apps_assign_test:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_assign_test
+  needs:
+    - job: "build_test_apps_assign_test"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/assign/test
+    TEST_ENV: ${ENV_TAG}
+
+#
+# Test apps: bimap
+#
+# example
+target_test_apps_bimap_example:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_bimap_example
+  needs:
+    - job: "build_test_apps_bimap_example"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/bimap/example
+    TEST_ENV: ${ENV_TAG}
+# test
+target_test_apps_bimap_test:
+  extends:
+    - .target_test_template
+    - .rules:build:test_apps_bimap_test
+  needs:
+    - job: "build_test_apps_bimap_test"
+      artifacts: true
+      optional: true
+  parallel:
+    matrix: !reference [.target_test_idf_target_version_general_matrix]
+  tags:
+    - ${IDF_TARGET}
+    - ${ENV_TAG}
+  variables:
+    TEST_TARGET: ${IDF_TARGET}
+    TEST_FOLDER: test_apps/bimap/test
+    TEST_ENV: ${ENV_TAG}
