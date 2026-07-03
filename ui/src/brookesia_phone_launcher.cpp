@@ -59,7 +59,7 @@ static bool apply_best_stylesheet(ESP_Brookesia_Phone* phone, int32_t width, int
         stylesheet.home.app_launcher.data.indicator.spot_inactive_size = ESP_BROOKESIA_STYLE_SIZE_SQUARE(6);
         stylesheet.home.app_launcher.data.indicator.spot_active_size = ESP_BROOKESIA_STYLE_SIZE_RECT(18, 6);
         stylesheet.manager.flags.enable_gesture = 1;
-        stylesheet.manager.flags.enable_gesture_navigation_back = 0;
+        stylesheet.manager.flags.enable_gesture_navigation_back = 1;
         ESP_LOGI(TAG, "Using Waveshare 240x320 launcher grid: 2 columns x 2 rows");
     } else {
         ESP_LOGW(TAG, "No exact Phone stylesheet for %" PRId32 "x%" PRId32 "; using default adaptive style", width, height);

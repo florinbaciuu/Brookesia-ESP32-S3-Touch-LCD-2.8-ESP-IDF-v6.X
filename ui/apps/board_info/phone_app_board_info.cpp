@@ -14,8 +14,8 @@ ESP_Brookesia_CoreAppData_t create_board_core_data()
 
 ESP_Brookesia_PhoneAppData_t create_board_phone_data()
 {
-    ESP_Brookesia_PhoneAppData_t data = ESP_BROOKESIA_PHONE_APP_DATA_DEFAULT(nullptr, true, true);
-    data.flags.enable_navigation_gesture = 0;
+    ESP_Brookesia_PhoneAppData_t data = ESP_BROOKESIA_PHONE_APP_DATA_DEFAULT(nullptr, true, false);
+    data.flags.enable_navigation_gesture = 1;
     return data;
 }
 
@@ -114,7 +114,7 @@ bool PhoneAppBoardInfo::run(void)
     create_info_row(root, "Storage", "SD/MMC, FATFS, SPIFFS, LittleFS");
     create_info_row(root, "Sensors", "PCF85063 RTC, QMI8658 IMU");
     create_info_row(root, "Audio", "PCM5101 I2S, default volume 50%");
-    create_info_row(root, "Navigation", "Fixed Back / Home / Recents bar");
+    create_info_row(root, "Navigation", "Brookesia gestures enabled");
     create_info_row(root, "CPU", "ESP32-S3 at 240 MHz");
     create_info_row(root, "Flash", "16 MB external flash");
     create_info_row(root, "PSRAM", "Octal PSRAM enabled");
