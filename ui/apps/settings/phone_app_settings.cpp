@@ -10,6 +10,7 @@ extern "C" {
 #include "lcd_backlight.h"
 #include "lvgl.h"
 #include "power_key.h"
+#include "settings_nvs.h"
 }
 
 namespace {
@@ -24,6 +25,7 @@ typedef struct {
 
 static settings_context_t s_settings = {};
 static bool s_navigation_bar_visible = false;
+static settings_nvs_values_t s_saved_values = {};
 
 ESP_Brookesia_CoreAppData_t create_settings_core_data()
 {
@@ -116,9 +118,31 @@ void set_value_fmt(lv_obj_t* label, const char* fmt, int value)
     }
 }
 
+bool is_slider_save_event(lv_event_code_t code)
+{
+    return code == LV_EVENT_RELEASED || code == LV_EVENT_PRESS_LOST || code == LV_EVENT_CANCEL;
+}
+
+void apply_navigation_bar_visible(bool visible)
+{
+    s_navigation_bar_visible = visible;
+
+    ESP_Brookesia_Phone* phone = s_settings.app == nullptr ? nullptr : s_settings.app->getPhone();
+    if (phone != nullptr && phone->getHome().getNavigationBar() != nullptr) {
+        phone->getHome().getNavigationBar()->setVisualMode(
+            visible ? ESP_BROOKESIA_NAVIGATION_BAR_VISUAL_MODE_SHOW_FIXED :
+                      ESP_BROOKESIA_NAVIGATION_BAR_VISUAL_MODE_HIDE);
+    }
+
+    if (s_settings.nav_value != nullptr) {
+        lv_label_set_text(s_settings.nav_value, visible ? "Fixed bar visible" : "Gestures only");
+    }
+}
+
 void brightness_event_cb(lv_event_t* event)
 {
-    if (lv_event_get_code(event) != LV_EVENT_VALUE_CHANGED) {
+    const lv_event_code_t code = lv_event_get_code(event);
+    if (code != LV_EVENT_VALUE_CHANGED && !is_slider_save_event(code)) {
         return;
     }
 
@@ -126,11 +150,16 @@ void brightness_event_cb(lv_event_t* event)
     const int32_t value = lv_slider_get_value(slider);
     Backlight_Set((uint8_t)value);
     set_value_fmt(s_settings.brightness_value, "%d%%", (int)value);
+
+    if (is_slider_save_event(code)) {
+        (void)settings_nvs_set_brightness((uint8_t)value);
+    }
 }
 
 void volume_event_cb(lv_event_t* event)
 {
-    if (lv_event_get_code(event) != LV_EVENT_VALUE_CHANGED) {
+    const lv_event_code_t code = lv_event_get_code(event);
+    if (code != LV_EVENT_VALUE_CHANGED && !is_slider_save_event(code)) {
         return;
     }
 
@@ -138,6 +167,10 @@ void volume_event_cb(lv_event_t* event)
     const int32_t value = lv_slider_get_value(slider);
     (void)audio_pcm5101_set_volume((uint8_t)value);
     set_value_fmt(s_settings.volume_value, "%d%%", (int)value);
+
+    if (is_slider_save_event(code)) {
+        (void)settings_nvs_set_volume((uint8_t)value);
+    }
 }
 
 void test_tone_event_cb(lv_event_t* event)
@@ -158,6 +191,7 @@ void power_latch_event_cb(lv_event_t* event)
     const esp_err_t err = power_key_set_latch(enabled);
     if (s_settings.power_value != nullptr) {
         if (err == ESP_OK) {
+            (void)settings_nvs_set_power_latch(enabled);
             lv_label_set_text(s_settings.power_value, enabled ? "Latch on" : "Latch off");
         } else {
             lv_label_set_text_fmt(s_settings.power_value, "Error: %s", esp_err_to_name(err));
@@ -172,18 +206,8 @@ void navigation_bar_event_cb(lv_event_t* event)
     }
 
     lv_obj_t* sw = lv_event_get_target_obj(event);
-    s_navigation_bar_visible = lv_obj_has_state(sw, LV_STATE_CHECKED);
-
-    ESP_Brookesia_Phone* phone = s_settings.app->getPhone();
-    if (phone != nullptr && phone->getHome().getNavigationBar() != nullptr) {
-        phone->getHome().getNavigationBar()->setVisualMode(
-            s_navigation_bar_visible ? ESP_BROOKESIA_NAVIGATION_BAR_VISUAL_MODE_SHOW_FIXED :
-                                       ESP_BROOKESIA_NAVIGATION_BAR_VISUAL_MODE_HIDE);
-    }
-
-    if (s_settings.nav_value != nullptr) {
-        lv_label_set_text(s_settings.nav_value, s_navigation_bar_visible ? "Fixed bar visible" : "Gestures only");
-    }
+    apply_navigation_bar_visible(lv_obj_has_state(sw, LV_STATE_CHECKED));
+    (void)settings_nvs_set_navigation_bar(s_navigation_bar_visible);
 }
 
 lv_obj_t* create_button(lv_obj_t* parent, const char* text, lv_event_cb_t cb)
@@ -223,6 +247,25 @@ bool PhoneAppSettings::run(void)
     s_settings = {};
     s_settings.app = this;
 
+    s_saved_values = {};
+    if (settings_nvs_load(&s_saved_values) != ESP_OK) {
+        s_saved_values.brightness_percent = s_backlight_level;
+
+        audio_pcm5101_status_t audio_status = {};
+        (void)audio_pcm5101_get_status(&audio_status);
+        s_saved_values.volume_percent = audio_status.volume_percent;
+
+        power_key_status_t power_status = {};
+        (void)power_key_get_status(&power_status);
+        s_saved_values.power_latch_enabled = power_status.latch_enabled;
+        s_saved_values.navigation_bar_visible = s_navigation_bar_visible;
+    }
+
+    Backlight_Set(s_saved_values.brightness_percent);
+    (void)audio_pcm5101_set_volume(s_saved_values.volume_percent);
+    (void)power_key_set_latch(s_saved_values.power_latch_enabled);
+    s_navigation_bar_visible = s_saved_values.navigation_bar_visible;
+
     lv_obj_set_style_bg_color(screen, lv_color_hex(0x101820), 0);
     lv_obj_set_style_bg_opa(screen, LV_OPA_COVER, 0);
 
@@ -251,35 +294,31 @@ bool PhoneAppSettings::run(void)
     lv_obj_t* brightness_row = create_setting_row(root, "Backlight");
     if (brightness_row != nullptr) {
         s_settings.brightness_value = create_value_label(brightness_row);
-        set_value_fmt(s_settings.brightness_value, "%d%%", s_backlight_level);
-        lv_obj_t* slider = create_slider(brightness_row, 5, 100, s_backlight_level);
+        set_value_fmt(s_settings.brightness_value, "%d%%", s_saved_values.brightness_percent);
+        lv_obj_t* slider = create_slider(brightness_row, 5, 100, s_saved_values.brightness_percent);
         if (slider != nullptr) {
-            lv_obj_add_event_cb(slider, brightness_event_cb, LV_EVENT_VALUE_CHANGED, nullptr);
+            lv_obj_add_event_cb(slider, brightness_event_cb, LV_EVENT_ALL, nullptr);
         }
     }
 
-    audio_pcm5101_status_t audio_status = {};
-    (void)audio_pcm5101_get_status(&audio_status);
     lv_obj_t* volume_row = create_setting_row(root, "Audio volume");
     if (volume_row != nullptr) {
         s_settings.volume_value = create_value_label(volume_row);
-        set_value_fmt(s_settings.volume_value, "%d%%", audio_status.volume_percent);
-        lv_obj_t* slider = create_slider(volume_row, 0, 100, audio_status.volume_percent);
+        set_value_fmt(s_settings.volume_value, "%d%%", s_saved_values.volume_percent);
+        lv_obj_t* slider = create_slider(volume_row, 0, 100, s_saved_values.volume_percent);
         if (slider != nullptr) {
-            lv_obj_add_event_cb(slider, volume_event_cb, LV_EVENT_VALUE_CHANGED, nullptr);
+            lv_obj_add_event_cb(slider, volume_event_cb, LV_EVENT_ALL, nullptr);
         }
         create_button(volume_row, "Test tone", test_tone_event_cb);
     }
 
-    power_key_status_t power_status = {};
-    (void)power_key_get_status(&power_status);
     lv_obj_t* power_row = create_setting_row(root, "Power latch");
     if (power_row != nullptr) {
         s_settings.power_value = create_value_label(power_row);
-        lv_label_set_text(s_settings.power_value, power_status.latch_enabled ? "Latch on" : "Latch off");
+        lv_label_set_text(s_settings.power_value, s_saved_values.power_latch_enabled ? "Latch on" : "Latch off");
         lv_obj_t* sw = lv_switch_create(power_row);
         if (sw != nullptr) {
-            if (power_status.latch_enabled) {
+            if (s_saved_values.power_latch_enabled) {
                 lv_obj_add_state(sw, LV_STATE_CHECKED);
             }
             lv_obj_add_event_cb(sw, power_latch_event_cb, LV_EVENT_VALUE_CHANGED, nullptr);
@@ -289,7 +328,7 @@ bool PhoneAppSettings::run(void)
     lv_obj_t* nav_row = create_setting_row(root, "Navigation bar");
     if (nav_row != nullptr) {
         s_settings.nav_value = create_value_label(nav_row);
-        lv_label_set_text(s_settings.nav_value, s_navigation_bar_visible ? "Fixed bar visible" : "Gestures only");
+        apply_navigation_bar_visible(s_navigation_bar_visible);
         lv_obj_t* sw = lv_switch_create(nav_row);
         if (sw != nullptr) {
             if (s_navigation_bar_visible) {

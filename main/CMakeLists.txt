@@ -33,6 +33,8 @@ set(app_priv_requires
     bsp_lcd_interface
     bsp_touch_interface
     bsp_lvgl_framework
+    audio_pcm5101
+    settings_nvs
 )
 
 # Set my components

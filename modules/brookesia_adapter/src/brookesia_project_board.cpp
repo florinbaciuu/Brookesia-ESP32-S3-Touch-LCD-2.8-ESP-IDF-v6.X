@@ -24,6 +24,7 @@ extern "C" {
 #include "power_key.h"
 #include "qmi8658.h"
 #include "rtc_pcf85063.h"
+#include "settings_nvs.h"
 #include "touch_bsp_interface.h"
 }
 
@@ -433,6 +434,15 @@ public:
         const esp_err_t power_key_err = power_key_init();
         if (power_key_err != ESP_OK) {
             ESP_LOGW(TAG, "Power key service unavailable: %s", esp_err_to_name(power_key_err));
+        } else {
+            settings_nvs_values_t settings = {};
+            const esp_err_t settings_err = settings_nvs_load(&settings);
+            if (settings_err == ESP_OK) {
+                const esp_err_t latch_err = power_key_set_latch(settings.power_latch_enabled);
+                if (latch_err != ESP_OK) {
+                    ESP_LOGW(TAG, "Failed to apply saved power latch: %s", esp_err_to_name(latch_err));
+                }
+            }
         }
 #endif
 #if CONFIG_BROOKESIA_ADAPTER_AUDIO_PCM5101_ENABLE
